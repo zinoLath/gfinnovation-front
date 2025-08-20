@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import api from "../../utils/server";
 import { tiposInvestimentos } from "../../utils/types";
 import type { Investimento } from "../../utils/types";
+import moment from 'moment';
 
 interface CadastroInvestimentosProps {
     onInvestmentAdded: () => void;
@@ -11,7 +12,7 @@ interface CadastroInvestimentosProps {
 export default function CadastroInvestimentos({ onInvestmentAdded }: CadastroInvestimentosProps) {
     const [nome, setNome] = useState("");
     const [tipo, setTipo] = useState(tiposInvestimentos[0].value);
-    const [valor, setValor] = useState(0);
+    const [valor, setValor] = useState("");
     const [data, setData] = useState("");
     const [message, setMessage] = useState<{label: string, className: string} | null>(null);
 
@@ -23,12 +24,12 @@ export default function CadastroInvestimentos({ onInvestmentAdded }: CadastroInv
             await api.post("/investment", {
                 nome,
                 tipo,
-                valor,
+                valor: parseFloat(valor.replace(',', '.')),
                 data,
             });
             setNome("");
             setTipo(tiposInvestimentos[0].value);
-            setValor(0);
+            setValor("");
             setData("");
             onInvestmentAdded();
             setMessage({ label: "Investimento cadastrado com sucesso!", className: "text-green-600 text-center font-bold p-2" });
@@ -80,11 +81,15 @@ export default function CadastroInvestimentos({ onInvestmentAdded }: CadastroInv
                         <input
                             type="number"
                             value={valor}
-                            onChange={(e) => setValor(Number(e.target.value))}
+                            onChange={(e) => {
+                                // Only allow digits and one dot, block negative and non-numeric chars
+                                const val = e.target.value.replace(/[^0-9.]/g, "");
+                                setValor(val);
+                            }}
                             required
                             min="0"
                             step="0.01"
-                            placeholder="0.00"
+                            placeholder="0"
                             className="border border-gray-300 p-2 w-full mb-2"
                         />
                     </label>
@@ -98,6 +103,7 @@ export default function CadastroInvestimentos({ onInvestmentAdded }: CadastroInv
                             onChange={(e) => setData(e.target.value)}
                             required
                             className="border border-gray-300 p-2 w-full mb-2"
+                            max={moment().format("YYYY-MM-DD")}
                         />
                     </label>
                 </div>

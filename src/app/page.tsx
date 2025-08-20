@@ -11,8 +11,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="">
-      <h1 className="text-4xl font-bold text-center">Gerenciador de Investimentos</h1>
+    <div className="py-10">
+      <h1 className="text-4xl font-bold text-center my-8">Gerenciador de Investimentos</h1>
       <CadastroInvestimentos onInvestmentAdded={handleInvestmentAdded} />
       <ListaInvestimentos refreshTrigger={refreshTrigger} />
     </div>

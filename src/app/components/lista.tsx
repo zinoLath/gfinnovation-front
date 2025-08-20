@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { tiposInvestimentos } from "../../utils/types";
 import type { Investimento } from "../../utils/types";
 import api from "../../utils/server";
+import Grafico from "./grafico";
+import moment from 'moment';
 
 interface ListaInvestimentosProps {
     refreshTrigger: number;
@@ -127,6 +129,7 @@ function FormularioEdicao({ investimento, handleConfirm, handleCancel }:
                         value={editData}
                         onChange={(e) => setEditData(e.target.value)}
                         required
+                        max={moment().format("YYYY-MM-DD")}
                     />
                 </label>
                 <button
@@ -219,6 +222,7 @@ export default function ListaInvestimentos({ refreshTrigger }: ListaInvestimento
 
     return (
         <>
+            {investimentos.length > 0 && <Grafico investimentos={investimentos} />}
             {message && <div className={message.className}>{message.label}</div>}
             {loading && <div className="text-blue-600 text-center font-bold p-2">Carregando...</div>}
             <table className="w-full max-w-2xl m-auto mt-6 bg-white shadow-md rounded-lg">
