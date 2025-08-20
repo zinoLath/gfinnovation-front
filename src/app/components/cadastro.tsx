@@ -11,7 +11,7 @@ interface CadastroInvestimentosProps {
 export default function CadastroInvestimentos({ onInvestmentAdded }: CadastroInvestimentosProps) {
     const [nome, setNome] = useState("");
     const [tipo, setTipo] = useState(tiposInvestimentos[0].value);
-    const [valor, setValor] = useState("");
+    const [valor, setValor] = useState(0);
     const [data, setData] = useState("");
     const [message, setMessage] = useState<{label: string, className: string} | null>(null);
 
@@ -23,12 +23,12 @@ export default function CadastroInvestimentos({ onInvestmentAdded }: CadastroInv
             await api.post("/investment", {
                 nome,
                 tipo,
-                valor: parseFloat(valor),
+                valor,
                 data,
             });
             setNome("");
             setTipo(tiposInvestimentos[0].value);
-            setValor("");
+            setValor(0);
             setData("");
             onInvestmentAdded();
             setMessage({ label: "Investimento cadastrado com sucesso!", className: "text-green-600 text-center font-bold p-2" });
@@ -80,11 +80,11 @@ export default function CadastroInvestimentos({ onInvestmentAdded }: CadastroInv
                         <input
                             type="number"
                             value={valor}
-                            onChange={(e) => setValor(e.target.value)}
+                            onChange={(e) => setValor(Number(e.target.value))}
                             required
                             min="0"
                             step="0.01"
-                            placeholder="0,00"
+                            placeholder="0.00"
                             className="border border-gray-300 p-2 w-full mb-2"
                         />
                     </label>

@@ -21,7 +21,7 @@ function InvestimentoLinha({ investimento, handleEditClick, handleDeleteClick, l
             <td className="border border-gray-300 p-2">{investimento.nome}</td>
             <td className="border border-gray-300 p-2">{tiposInvestimentos.find((type) => type.value === investimento.tipo)?.label}</td>
             <td className="border border-gray-300 p-2">
-                {investimento.valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                {Number(investimento.valor).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
             </td>
             <td className="border border-gray-300 p-2">
                 {new Date(investimento.data).toLocaleDateString("pt-BR")}
