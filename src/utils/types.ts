@@ -1,5 +1,5 @@
 
-export const investmentTypes = [
+export const tiposInvestimentos = [
     { value: "ACAO", label: "Ações" },
     { value: "FUNDO", label: "Fundos" },
     { value: "TITULO", label: "Títulos" },

@@ -1,8 +1,9 @@
 "use client"
 import React from "react";
-import { useState } from "react";
-import { investmentTypes } from "../../utils/types";
+import { useState, useEffect } from "react";
+import { tiposInvestimentos } from "../../utils/types";
 import type { Investimento } from "../../utils/types";
+import api from "../../utils/server";
 
 function InvestimentoLinha({ investimento, handleEditClick, handleDeleteClick }: 
                 { 
@@ -13,7 +14,7 @@ function InvestimentoLinha({ investimento, handleEditClick, handleDeleteClick }:
     return (
         <>
             <td className="border border-gray-300 p-2">{investimento.nome}</td>
-            <td className="border border-gray-300 p-2">{investimento.tipo}</td>
+            <td className="border border-gray-300 p-2">{tiposInvestimentos.find((type) => type.value === investimento.tipo)?.label}</td>
             <td className="border border-gray-300 p-2">
                 {investimento.valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
             </td>
@@ -81,7 +82,7 @@ function FormularioEdicao({ investimento, handleConfirm }:
                         onChange={(e) => setEditTipo(e.target.value)}
                         className="border border-gray-300 p-2 w-3xs"
                     >
-                        {investmentTypes.map((type) => (
+                        {tiposInvestimentos.map((type) => (
                             <option key={type.value} value={type.value}>
                                 {type.label}
                             </option>
@@ -121,29 +122,18 @@ function FormularioEdicao({ investimento, handleConfirm }:
 
 
 export default function ListaInvestimentos() {
-    const [investimentos, setInvestimentos] = useState<Investimento[]>([
-        {
-            id: 1,
-            nome: "Ação XYZ",
-            tipo: "ACAO",
-            valor: 1000.0,
-            data: "2023-10-01",
-        },
-        {
-            id: 2,
-            nome: "Fundo ABC",
-            tipo: "FUNDO",
-            valor: 5000.0,
-            data: "2023-10-02",
-        },
-        {
-            id: 3,
-            nome: "Título DEF",
-            tipo: "TITULO",
-            valor: 2000.0,
-            data: "2023-10-03",
-        },
-    ]);
+    useEffect(() => {
+        async function fetchInvestimentos() {
+            try {
+                const response = await api.get("/investment");
+                setInvestimentos(response.data);
+            } catch (error) {
+                console.error("Erro ao buscar investimentos:", error);
+            }
+        }
+        fetchInvestimentos();
+    }, []);
+    const [investimentos, setInvestimentos] = useState<Investimento[]>([]);
 
     const [editID, setEditID] = useState<number | null>(null);
 

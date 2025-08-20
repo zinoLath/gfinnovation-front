@@ -5,10 +5,7 @@ import ListaInvestimentos from "./components/lista";
 export default function Home() {
   return (
     <div className="">
-      <h1 className="text-4xl font-bold">Cadastro de Investimentos</h1>
-      <p className="text-center">
-        Preencha o formulário abaixo para cadastrar um novo investimento.
-      </p>
+      <h1 className="text-4xl font-bold text-center">Gerenciador de Investimentos</h1>
       <CadastroInvestimentos />
       <ListaInvestimentos />
     </div>
