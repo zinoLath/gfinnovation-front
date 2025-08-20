@@ -4,7 +4,11 @@ import api from "../../utils/server";
 import { tiposInvestimentos } from "../../utils/types";
 import type { Investimento } from "../../utils/types";
 
-export default function CadastroInvestimentos() {
+interface CadastroInvestimentosProps {
+    onInvestmentAdded: () => void;
+}
+
+export default function CadastroInvestimentos({ onInvestmentAdded }: CadastroInvestimentosProps) {
     const [nome, setNome] = useState("");
     const [tipo, setTipo] = useState(tiposInvestimentos[0].value);
     const [valor, setValor] = useState("");
@@ -25,6 +29,7 @@ export default function CadastroInvestimentos() {
             setTipo(tiposInvestimentos[0].value);
             setValor("");
             setData("");
+            onInvestmentAdded(); // Notifica que um novo investimento foi adicionado
         } catch (error) {
             console.error("Erro ao cadastrar investimento:", error);
         }
@@ -65,7 +70,7 @@ export default function CadastroInvestimentos() {
                 </div>
                 <div>
                     <label>
-                        Valor:
+                        Valor (R$):
                         <input
                             type="number"
                             value={valor}
@@ -73,6 +78,7 @@ export default function CadastroInvestimentos() {
                             required
                             min="0"
                             step="0.01"
+                            placeholder="0,00"
                             className="border border-gray-300 p-2 w-full mb-2"
                         />
                     </label>
