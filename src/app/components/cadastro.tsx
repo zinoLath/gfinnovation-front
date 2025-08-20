@@ -13,6 +13,7 @@ export default function CadastroInvestimentos({ onInvestmentAdded }: CadastroInv
     const [tipo, setTipo] = useState(tiposInvestimentos[0].value);
     const [valor, setValor] = useState("");
     const [data, setData] = useState("");
+    const [message, setMessage] = useState<{label: string, className: string} | null>(null);
 
     // Submete o formulário e faz POST para /investment com tratamento de erros
     const handleSubmit = async (e: React.FormEvent) => {
@@ -29,15 +30,20 @@ export default function CadastroInvestimentos({ onInvestmentAdded }: CadastroInv
             setTipo(tiposInvestimentos[0].value);
             setValor("");
             setData("");
-            onInvestmentAdded(); // Notifica que um novo investimento foi adicionado
+            onInvestmentAdded();
+            setMessage({ label: "Investimento cadastrado com sucesso!", className: "text-green-600 text-center font-bold p-2" });
+            setTimeout(() => setMessage(null), 3000);
         } catch (error) {
             console.error("Erro ao cadastrar investimento:", error);
+            setMessage({ label: "Erro ao cadastrar investimento!", className: "text-red-600 text-center font-bold p-2" });
+            setTimeout(() => setMessage(null), 3000);
         }
     };
 
     return (
         <div className="max-w-md mx-auto p-4 bg-white shadow-md text-black rounded-lg shadow-lg">
             <h2 className="text-lg font-bold mb-4 text-center">Cadastro de Investimentos</h2>
+            {message && <div className={message.className}>{message.label}</div>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>
